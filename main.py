@@ -1,40 +1,37 @@
-import numpy as np
 from tqdm import tqdm
 from data_manager import *
 from view_manager import *
 from individu import *
 from utils import *
+import numpy as np
 
 
-epoch = 20
-nbParents = 100
-keep = 0.2
-
+epoch = 100
+nbParents = 50
+keep = 0.3
+# add nb of mutations
+# add nb of block for mutations
 
 def run():
     dm = DataManager()
-    nbBest = nbParents * keep
-    parents = np.array(None)
-    fit = np.array(None)
-    children = None
+    population = []
     loss = []
 
-    # init parents and compute fitness
+    # init population (gene + fitness) and theOne
     for i in range(nbParents):
-        np.append(parents, individu(dm.size))
-        np.append(fit, parents[i].fitness(dm.data))
+        population.append(Individu(generateGenome(dm.size), dm.data))
+    population = sorted(population, key=lambda individu: individu.fit)
+    loss.append(population[0].fit)
+    theOne = population[0]
 
     for _ in tqdm(range(epoch)):
-        # sort parent and keep best
-        best = parents[(fit.argsort())[:nbBest]]
-        loss.append(best[0].fitness(dm.data))
+        population = newGen(population[:int(nbParents * keep)], nbParents, dm.data)
+        population = sorted(population, key=lambda individu: individu.fit)
+        loss.append(population[0].fit)
+        if theOne.fit > population[0].fit:
+            theOne = population[0]
 
-        # croisement & mutation
-        children = newGen(best, nbParents)
-
-    # sort
-    loss.append(children[0].fitness(dm.data))
-    vm = ViewManager(loss, dm.data[np.array(indices)])
+    vm = ViewManager(loss, np.array(dm.data)[np.array(theOne.genome)])
     vm.draw()
 
 

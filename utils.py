@@ -1,33 +1,59 @@
+from individu import *
 import numpy as np
+import random as rd
 
 
-def newGen(parents, nbchild):
-    # nb de baise/parents
-    var = np.ceil(nbchild/parents)
-    children = np.array(None)
-    # tableau de chasse de chaque parent
-    honeyMoon = np.array(None)
+def generateGenome(size):
+    return rd.sample(range(size), size)
+
+
+def newGen(parents, nbchild, data):
+    var = int(np.ceil(nbchild/len(parents)))# nb de baise/parents
+    childrens = []
+    honeyMoon = []                          # tableau de chasse de chaque parent
 
     for i in range(len(parents)):
-        # tous les parents possible
-        tmp = np.arange(0, len(parents))
-        # un parents ne se baise pas lui meme
-        np.delete(tmp, i)
-        # randomise le tout
-        np.random.shuffle(tmp)
-        # prend les premiers parents
-        np.append(honeyMoon, tmp[:var])
-    # transpose la matrice
-    np.rot90(honeyMoon)
+        tmp = np.arange(0, len(parents))    # tous les parents possible
+        tmp = np.delete(tmp, i)                   # un parents ne se baise pas lui meme
+        np.random.shuffle(tmp)              # randomise le tout
+        honeyMoon.append(tmp[:var])         # prend les premiers parents
+    honeyMoon = np.transpose(np.array(honeyMoon))
 
     for c in range(nbchild):
-        i = c//var
-        j = c%var
+        i = c // var
+        j = c % var
+        childrens.append(croisement(parents[i].genome, parents[honeyMoon[j][i]].genome, data))
+        # Todo mutation
 
-        np.append(children, croisement(parents[j], parents[honeyMoon[i][j]]))
-
-    return children
+    return childrens
 
 
-def croisement(p1, p2):
-    return
+def croisement(p1, p2, data):
+    size = len(p1)
+    done = [False]*size
+    cycles = []
+
+    # identifie les cycles
+    for i in range(size):
+        if done[i]:
+            continue
+        done[i] = True
+        cycles.append([i])
+        gene = p2[i]
+
+        while gene != p1[i]:
+            indice = p1.index(gene)
+            done[indice] = True
+            cycles[-1].append(indice)
+            gene = p2[indice]
+
+    # creer fils (recombine les cycles)
+    b = False
+    genome = []
+
+    for c in cycles:
+        for i in c:
+            genome.append(p1[i] if b else p2[i])
+        b = not b
+
+    return Individu(genome, data)

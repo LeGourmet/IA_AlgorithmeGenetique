@@ -1,21 +1,20 @@
 import os
-import numpy as np
 import random as rd
 from tqdm import tqdm
 
 
 class DataManager:
-    def __init__(self, file=None):
-        self.data = np.array(None)
-        self.size = None
-        self.load_data(file)
+    def __init__(self, file=None, size=100):
+        self.data = []
+        self.size = 0
+        self.load_data(file, size)
 
-    def load_data(self, file):
+    def load_data(self, file, size):
         if (file is not None) and (os.path.isfile("./model/" + file)):
             print("Loading", file, "...")
-            # Todo
+            # Todo loader
         else:
-            self.size = 15
+            self.size = size
             print("Creating data ...")
             for _ in tqdm(range(self.size)):
-                np.append(self.data, (rd.randint(2, 48), rd.randint(2, 48)))
+                self.data.append((rd.randint(0, 1000), rd.randint(0, 1000)))

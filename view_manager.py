@@ -16,6 +16,7 @@ class ViewManager:
 
     def draw(self):
         plt.figure()
+
         for line in self.lines:
             plt.plot(line[0], line[1])
         for point in self.points:

@@ -1,12 +1,12 @@
-import random as rd
+import math
 
-class individu:
-    def __init__(self, size):
-        self.gene = None
-        self.generate_population(size)
 
-    def fitness(self,data):
-        return
+class Individu:
+    def __init__(self, genome, data):
+        self.genome = genome
+        self.fit = 0
+        self.fitness(data)
 
-    def generate_population(self, size):
-        self.gene = rd.sample(range(size), size)
+    def fitness(self, data):
+        for i in range(len(self.genome)):
+            self.fit += math.dist(data[self.genome[i-1]], data[self.genome[i]])
