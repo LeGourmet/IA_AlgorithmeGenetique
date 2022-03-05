@@ -6,11 +6,13 @@ from utils import *
 import numpy as np
 
 
-epoch = 100
-nbParents = 50
-keep = 0.3
+epoch = 1000
+nbParents = 500
+keep = 0.2
+mutation_rate = 0
 # add nb of mutations
 # add nb of block for mutations
+
 
 def run():
     dm = DataManager()
@@ -20,6 +22,7 @@ def run():
     # init population (gene + fitness) and theOne
     for i in range(nbParents):
         population.append(Individu(generateGenome(dm.size), dm.data))
+
     population = sorted(population, key=lambda individu: individu.fit)
     loss.append(population[0].fit)
     theOne = population[0]

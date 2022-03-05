@@ -4,6 +4,7 @@ from tqdm import tqdm
 
 
 class DataManager:
+
     def __init__(self, file=None, size=100):
         self.data = []
         self.size = 0

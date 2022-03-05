@@ -1,4 +1,3 @@
-import numpy as np
 import matplotlib.pyplot as plt
 
 
@@ -12,7 +11,7 @@ class ViewManager:
     def compute(self, data):
         self.points = data
         for i in range(len(data)):
-            self.lines.append([[data[i-1][0], data[i][0]], [data[i-1][1], data[i][1]]])
+            self.lines.append([[data[i - 1][0], data[i][0]], [data[i - 1][1], data[i][1]]])
 
     def draw(self):
         plt.figure()

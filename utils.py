@@ -4,11 +4,20 @@ import random as rd
 
 
 def generateGenome(size):
+    """generate a new random genome, each nuber is unique
+    Args: size : size of the genome
+    """
     return rd.sample(range(size), size)
 
 
 def newGen(parents, nbchild, data):
-    var = int(np.ceil(nbchild/len(parents)))# nb de baise/parents
+    """breeds a new generation from given parents
+
+    Args:
+        parents : Genes of the parents
+        nbchild : number of children to produce
+    """
+    var = int(np.ceil(nbchild / len(parents)))  # nb de baise/parents
     childrens = []
     honeyMoon = []                          # tableau de chasse de chaque parent
 
@@ -30,7 +39,7 @@ def newGen(parents, nbchild, data):
 
 def croisement(p1, p2, data):
     size = len(p1)
-    done = [False]*size
+    done = [False] * size
     cycles = []
 
     # identifie les cycles
