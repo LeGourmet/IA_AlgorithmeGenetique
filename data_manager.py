@@ -1,6 +1,4 @@
-from typing import List
 import numpy as np
-import os
 import random as rd
 from tqdm import tqdm
 
@@ -24,8 +22,9 @@ class DataManager:
         #     self.data.append((rd.randint(0, 1000), rd.randint(0, 1000)))
 
         self.size = min(self.size, len(self.data))
-        self.data =self.data[:self.size]
+        self.data = self.data[:self.size]
         self.data = np.array(self.data)
+
 
 if __name__ == '__main__':
     dm = DataManager()

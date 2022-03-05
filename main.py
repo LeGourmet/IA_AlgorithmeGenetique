@@ -13,6 +13,7 @@ mutation_rate = 0.0
 # add nb of block for mutations
 # todo longévité des individus (ne pas tuer tous les individus à chaque epoch (cf tp)) (enfaitnon c'est pas top après avoir testé ... )
 
+
 def run():
     dm = DataManager()
     population = []

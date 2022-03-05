@@ -30,7 +30,8 @@ def newGen(population, population_size, mutation_rate, data):
     for i in range(len(population)):
         tmp = np.arange(0, len(population))    # tous les parents possible
         tmp = np.delete(tmp, i)                # un parents ne se baise pas lui meme
-        np.random.shuffle(tmp)                 # randomise le tout - todo check si nécéssaire (plus rapide avec shuffle, what ? )
+        # randomise le tout - todo check si nécéssaire (plus rapide avec shuffle, what ? )
+        np.random.shuffle(tmp)
         honeyMoon.append(tmp[:breed_per_parents])         # prend les premiers parents
     honeyMoon = (np.array(honeyMoon))
 
@@ -46,10 +47,11 @@ def newGen(population, population_size, mutation_rate, data):
     np.random.shuffle(children)
 
     # for c in children:
-        # c.genome = mutation(c.genome, mutation_rate)
-        # c.age += 1
+    # c.genome = mutation(c.genome, mutation_rate)
+    # c.age += 1
 
     return children
+
 
 def keep_parents(population, keep):
     population_size = len(population)
@@ -57,7 +59,7 @@ def keep_parents(population, keep):
     childrentemp = population[:int(nb_parents_kept)]
     children = [c for c in childrentemp if c.age > 5]
     nb_parents_kept = len(children)
-    return population_size,nb_parents_kept,children
+    return population_size, nb_parents_kept, children
 
 
 # todo return 2 children
