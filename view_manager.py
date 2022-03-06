@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 
 class ViewManager:
     def __init__(self):
-        plt.ion()
+        # plt.ion()  # montre le plot en fait, donc pas top avec le show_progress=False
         self.figure, axes = plt.subplots(1, 2, figsize=(10, 4))
         axes[0].set_aspect(1)
 
