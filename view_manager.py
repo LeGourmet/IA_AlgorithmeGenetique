@@ -6,7 +6,7 @@ from data_manager import DataManager
 
 class ViewManager:
     def __init__(self):
-        # plt.ion()
+        plt.ion()
         self.figure, axes = plt.subplots(1, 2, figsize=(10, 4))
         axes[0].set_aspect(1)
 
