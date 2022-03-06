@@ -69,34 +69,33 @@ def keep_parents(population, keep):
 
 
 # todo return 2 children
-# todo test other crossovers
 def crossover(g1, g2):
     size = len(g1)
-    done = [False] * size
+    gene_already_treated = [False] * size
     cycles = []
 
     # identifie les cycles
-    for i in range(size):
-        if done[i]:
+    for gene in range(size):
+        if gene_already_treated[gene]:
             continue
-        done[i] = True
-        cycles.append([i])
-        gene = g2[i]
+        gene_already_treated[gene] = True
+        cycles.append([gene])
+        gene = g2[gene]
 
-        while gene != g1[i]:
-            indice = g1.index(gene)
-            done[indice] = True
-            cycles[-1].append(indice)
-            gene = g2[indice]
+        while gene != g1[gene]:
+            gene_index = g1.index(gene)
+            gene_already_treated[gene_index] = True
+            cycles[-1].append(gene_index)
+            gene = g2[gene_index]
 
     # creer fils (recombine les cycles)
-    b = False
+    alternate_cycle = False
     genome = []
 
-    for c in cycles:
-        for i in c:
-            genome.append(g1[i] if b else g2[i])
-        b = not b
+    for cycle in cycles:
+        for gene in cycle:
+            genome.append(g1[gene] if alternate_cycle else g2[gene])
+        alternate_cycle = not alternate_cycle
 
     return genome
 
