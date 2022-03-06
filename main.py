@@ -11,7 +11,7 @@ file = "./circle50.npy"
 data_size = 50
 
 # training parameters
-max_epoch = 1000
+max_epoch = 2000
 keep = 0.2
 population_size = 100
 mutation_rate = 0.006
