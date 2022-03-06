@@ -6,7 +6,7 @@ class Individu:
         self.genome = genome
         self.loss = 0
         self.compute_loss(data)
-        self.age = 0
+        # self.age = 0  # unused
 
     def compute_loss(self, data):
         self.loss = 0
