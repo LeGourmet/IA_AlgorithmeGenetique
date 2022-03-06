@@ -75,26 +75,26 @@ def crossover(g1, g2):
     cycles = []
 
     # identifie les cycles
-    for gene in range(size):
-        if gene_already_treated[gene]:
+    for gene1 in range(size):
+        if gene_already_treated[gene1]:
             continue
-        gene_already_treated[gene] = True
-        cycles.append([gene])
-        gene = g2[gene]
+        gene_already_treated[gene1] = True
+        cycles.append([gene1])
+        gene2 = g2[gene1]
 
-        while gene != g1[gene]:
-            gene_index = g1.index(gene)
+        while gene2 != g1[gene1]:
+            gene_index = g1.index(gene2)
             gene_already_treated[gene_index] = True
             cycles[-1].append(gene_index)
-            gene = g2[gene_index]
+            gene2 = g2[gene_index]
 
     # creer fils (recombine les cycles)
     alternate_cycle = False
     genome = []
 
     for cycle in cycles:
-        for gene in cycle:
-            genome.append(g1[gene] if alternate_cycle else g2[gene])
+        for gene2 in cycle:
+            genome.append(g1[gene2] if alternate_cycle else g2[gene2])
         alternate_cycle = not alternate_cycle
 
     return genome
