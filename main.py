@@ -7,17 +7,18 @@ import numpy as np
 
 # data
 file = "./circle50.npy"
+# file = "./"
 data_size = 50
 
 # training parameters
 max_epoch = 1000
-population_size = 100
 keep = 0.2
-mutation_rate = 0.007
+population_size = 100
+mutation_rate = 0.006
 target_loss = 3.14
 
 # display options
-refresh = 20
+refresh = 10
 show_progress = True  # real time plot, but slower
 
 
@@ -43,7 +44,7 @@ def display_evolution_graph(vm, dm, losses, last_gene, final=False):
 def disaply_evolution_info(vm, dm, population, losses, theOne, epoch):
     if(epoch % (max_epoch // 10) == 0):  # update every 10% of progress
         print("\nEpoch :", epoch, "- loss :", losses[-1])
-        print("\nBest loss =", theOne.loss, "at epoch ", len(losses) - 1)
+        print("Best loss :", theOne.loss, "at epoch ", np.argmin(losses), "\n")
     if(epoch % refresh == 0):
         display_evolution_graph(vm, dm, losses, population[0])
 
@@ -55,10 +56,11 @@ def run_genetic(vm, dm, population, losses, theOne):
         population = newGen(elite, population_size, mutation_rate, dm.data)
         population = sort_population(population)
         theOne = update_loss(population, losses, theOne)
-        disaply_evolution_info(vm, dm, population, losses, theOne, epoch)
         if(losses[-1] < target_loss):
             break
-    print("\nFinished genentic evolution with best loss =", theOne.loss, "at epoch ", len(losses) - 1)
+        disaply_evolution_info(vm, dm, population, losses, theOne, epoch)
+    print("\n(epoch", len(losses)-1, ") - Finished genentic evolution")
+    print("Best loss :", theOne.loss, "at epoch ", np.argmin(losses))
     return theOne
 
 
