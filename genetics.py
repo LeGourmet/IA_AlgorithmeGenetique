@@ -59,7 +59,7 @@ def get_mating_pool(population, population_size):
 
 
 def keep_parents(population, keep):
-    #unused
+    # unused
     population_size = len(population)
     nb_parents_kept = population_size * keep
     childrentemp = population[:int(nb_parents_kept)]
@@ -69,7 +69,7 @@ def keep_parents(population, keep):
 
 
 # todo return 2 children
-#todo test other crossovers
+# todo test other crossovers
 def crossover(g1, g2):
     size = len(g1)
     done = [False] * size
@@ -99,6 +99,38 @@ def crossover(g1, g2):
         b = not b
 
     return genome
+
+
+def crossover2(g1, g2):
+    offspring1 = []
+    offspring2 = []
+
+    cut1 = rd.randint(0, len(g1))
+    cut2 = rd.randint(0, len(g2))
+
+    start = min(cut1, cut2)
+    end = max(cut1, cut2)
+
+    for i in range(start, end):
+        offspring1.append(g1[i])
+
+    offspring2 = [g for g in g2 if g not in offspring1]
+
+    return offspring1 + offspring2
+
+
+def crossover3(g1, g2):
+    offspring1 = []
+    offspring2 = []
+
+    cut = rd.randint(0, len(g1))
+
+    for i in range(0, cut):
+        offspring1.append(g1[i])
+
+    offspring2 = [g for g in g2 if g not in offspring1]
+
+    return offspring1 + offspring2
 
 
 def mutation(genome, mutation_rate: float):

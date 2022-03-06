@@ -6,7 +6,7 @@ from genetics import *
 import numpy as np
 
 
-max_epoch = 1000
+max_epoch = 2000
 population_size = 100
 keep = 0.2
 mutation_rate = 0.006
