@@ -27,6 +27,7 @@ def newGen(population, population_size, mutation_rate, data):
     # todo find a betterway to breed parents when nb_parents or nb_children is small (avoid out of range)
     return evolve(population, population_size, mutation_rate, data, children, breed_per_parents, honeyMoon)
 
+    # legacy from  keep_parents
     # for c in children:
     # c.genome = mutation(c.genome, mutation_rate)
     # c.age += 1
@@ -58,6 +59,7 @@ def get_mating_pool(population, population_size):
 
 
 def keep_parents(population, keep):
+    #unused
     population_size = len(population)
     nb_parents_kept = population_size * keep
     childrentemp = population[:int(nb_parents_kept)]
@@ -67,6 +69,7 @@ def keep_parents(population, keep):
 
 
 # todo return 2 children
+#todo test other crossovers
 def crossover(g1, g2):
     size = len(g1)
     done = [False] * size
@@ -136,10 +139,6 @@ if __name__ == '__main__':
 
     for _ in tqdm(range(100)):
         population.append(Individu(generateGenome(dm.size), dm.data))
-
-    population[8].age = 8
-    population[6].age = 8
-    population[7].age = 8
 
     gene = population[0].genome
     print("==>> population[0].genome: ", gene)
