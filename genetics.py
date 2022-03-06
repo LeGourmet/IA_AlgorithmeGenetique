@@ -23,17 +23,12 @@ def newGen(population, population_size, mutation_rate, data):
     """
     # population_size, nb_parents_kept, children = keep_parents(population, keep)
     breed_per_parents, honeyMoon = get_mating_pool(population, population_size)
-    children = []
     # todo find a betterway to breed parents when nb_parents or nb_children is small (avoid out of range)
-    return evolve(population, population_size, mutation_rate, data, children, breed_per_parents, honeyMoon)
-
-    # legacy from  keep_parents
-    # for c in children:
-    # c.genome = mutation(c.genome, mutation_rate)
-    # c.age += 1
+    return evolve(population, population_size, mutation_rate, data, breed_per_parents, honeyMoon)
 
 
-def evolve(population, population_size, mutation_rate, data, children, breed_per_parents, honeyMoon):
+def evolve(population, population_size, mutation_rate, data, breed_per_parents, honeyMoon):
+    children = []
     for c in (range(population_size)):
         i = c // breed_per_parents
         j = c % breed_per_parents
@@ -69,7 +64,6 @@ def keep_parents(population, keep):
 
 
 # todo return 2 children
-# todo test other crossovers
 def crossover(g1, g2):
     size = len(g1)
     done = [False] * size
