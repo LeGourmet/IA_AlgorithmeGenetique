@@ -41,12 +41,13 @@ def evolve(population, population_size, mutation_rate, data, breed_per_parents, 
 
 def get_mating_pool(population, population_size):
     breed_per_parents = int(np.ceil(population_size / len(population)))  # nb de baise/parents
+    # np.random.shuffle(population)
     honeyMoon = []  # tableau de chasse de chaque parent
     for i in range(len(population)):
         tmp = np.arange(0, len(population))    # tous les parents possible
         tmp = np.delete(tmp, i)                # un parents ne se baise pas lui meme
         # randomise le tout - todo check si nécéssaire (plus rapide avec shuffle, what ? )
-        np.random.shuffle(tmp)
+        # np.random.shuffle(tmp)
         honeyMoon.append(tmp[:breed_per_parents])         # prend les premiers parents
     honeyMoon = (np.array(honeyMoon))
     return breed_per_parents, honeyMoon
