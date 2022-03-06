@@ -18,7 +18,7 @@ class DataManager:
         except (OSError, TypeError):
             print("Could not load array")
             for _ in tqdm(range(size)):
-                self.data.append((rd.random()*200, rd.random()*200))
+                self.data.append((rd.random(), rd.random()))
 
         self.size = len(self.data)
         self.data = self.data[:self.size]
