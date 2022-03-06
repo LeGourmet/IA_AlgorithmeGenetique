@@ -1,4 +1,3 @@
-from typing import final
 from tqdm import tqdm
 from data_manager import *
 from view_manager import *
@@ -6,13 +5,18 @@ from individu import *
 from genetics import *
 import numpy as np
 
+# data
+file = "./circle50.npy"
+data_size = 50
 
-max_epoch = 2000
+# training parameters
+max_epoch = 1000
 population_size = 100
 keep = 0.2
 mutation_rate = 0.007
 target_loss = 3.14
-data_size = 50
+
+# display options
 refresh = 20
 show_progress = True  # real time plot, but slower
 
@@ -81,7 +85,6 @@ def sort_population(population):
 def run():
     print_parameters()
 
-    file = "./circle50.npy"
     dm = DataManager(file=file, size=data_size)
     vm = ViewManager()
     population = []

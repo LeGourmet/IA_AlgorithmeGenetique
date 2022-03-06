@@ -1,8 +1,4 @@
 import matplotlib.pyplot as plt
-from numpy import block
-
-from data_manager import DataManager
-
 
 class ViewManager:
     def __init__(self):

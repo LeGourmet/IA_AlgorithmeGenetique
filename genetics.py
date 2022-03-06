@@ -1,4 +1,3 @@
-from typing import List
 from data_manager import DataManager
 from individu import *
 import numpy as np
