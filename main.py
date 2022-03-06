@@ -9,9 +9,9 @@ import numpy as np
 max_epoch = 1000
 population_size = 100
 keep = 0.2
-mutation_rate = 0.005
+mutation_rate = 0.006
 target_loss = 3.14
-data_size = 25
+data_size = 50
 # add max nb of block for mutations ?
 # todo longévité des individus (ne pas tuer tous les individus à chaque epoch (cf tp)) (enfaitnon c'est pas top après avoir testé ... )
 
@@ -28,7 +28,7 @@ def initialize_population(dm, population, losses):
 
 def display_evolution(dm, losses, theOne):
     # todo update matplotlib per n iteration
-    print("best loss =", theOne.loss)
+    print("best loss =", theOne.loss, "at epoch ", len(losses)-1)
     best_gene = np.array(theOne.genome)
     best_path = dm.data[best_gene]
     vm = ViewManager(losses, best_path)
