@@ -8,7 +8,6 @@ class ViewManager:
 
         self.fig_path = axes[0]
         self.fig_loss = axes[1]
-        # plt.tight_layout()
 
     def update(self, losses, best_path, final=False):
         self.fig_path.clear()
