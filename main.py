@@ -12,8 +12,7 @@ keep = 0.2
 mutation_rate = 0.006
 target_loss = 3.14
 data_size = 50
-# add max nb of block for mutations ?
-# todo longévité des individus (ne pas tuer tous les individus à chaque epoch (cf tp)) (enfaitnon c'est pas top après avoir testé ... )
+refresh = 200
 
 
 def initialize_population(dm, population, losses):
@@ -26,16 +25,14 @@ def initialize_population(dm, population, losses):
     return theOne
 
 
-def display_evolution(dm, losses, theOne):
-    # todo update matplotlib per n iteration
+def display_evolution(vm, dm, losses, theOne):
     print("best loss =", theOne.loss, "at epoch ", len(losses) - 1)
     best_gene = np.array(theOne.genome)
     best_path = dm.data[best_gene]
-    vm = ViewManager(losses, best_path)
-    vm.draw()
+    vm.update(losses, best_path)
 
 
-def run_genetic(dm, population, losses, theOne):
+def run_genetic(vm, dm, population, losses, theOne):
     print("Genetic evolution in progress ...")
     for epoch in tqdm(range(max_epoch)):
         elite = population[:int(population_size * keep)]
@@ -46,6 +43,7 @@ def run_genetic(dm, population, losses, theOne):
             theOne = population[0]
         if(epoch % (max_epoch // 10) == 0):
             print("\nEpoch :", epoch, "- loss :", losses[-1])
+            display_evolution(vm, dm, losses, theOne)
         if(losses[-1] < target_loss):
             break
     return theOne
@@ -69,12 +67,13 @@ def run():
 
     file = "./circle50.npy"
     dm = DataManager(file=file, size=data_size)
+    vm = ViewManager()
     population = []
     losses = []
 
     theOne = initialize_population(dm, population, losses)
-    theOne = run_genetic(dm, population, losses, theOne)
-    display_evolution(dm, losses, theOne)
+    theOne = run_genetic(vm, dm, population, losses, theOne)
+    display_evolution(vm, dm, losses, theOne)
 
 
 if __name__ == '__main__':
