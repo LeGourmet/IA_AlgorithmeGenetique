@@ -16,37 +16,37 @@ data_size = 25
 # todo longévité des individus (ne pas tuer tous les individus à chaque epoch (cf tp)) (enfaitnon c'est pas top après avoir testé ... )
 
 
-def initialize_population(dm, population, loss):
+def initialize_population(dm, population, losses):
     # init population (gene + loss) and theOne
     for _ in range(population_size):
         population.append(Individu(generateGenome(dm.size), dm.data))
     population = sort_population(population)
-    loss.append(population[0].loss)
+    losses.append(population[0].loss)
     theOne = population[0]
     return theOne
 
 
-def display_evolution(dm, loss, theOne):
+def display_evolution(dm, losses, theOne):
     # todo update matplotlib per n iteration
     print("best loss =", theOne.loss)
     best_gene = np.array(theOne.genome)
     best_path = dm.data[best_gene]
-    vm = ViewManager(loss, best_path)
+    vm = ViewManager(losses, best_path)
     vm.draw()
 
 
-def run_genetic(dm, population, loss, theOne):
+def run_genetic(dm, population, losses, theOne):
     print("Genetic evolution in progress ...")
     for epoch in tqdm(range(max_epoch)):
         elite = population[:int(population_size * keep)]
         population = newGen(elite, population_size, mutation_rate, dm.data)
         population = sort_population(population)
-        loss.append(population[0].loss)
+        losses.append(population[0].loss)
         if theOne.loss > population[0].loss:
             theOne = population[0]
         if(epoch % (max_epoch//10) == 0):
-            print("\nEpoch :", epoch, "- loss :", loss[-1])
-        if(loss[-1] < target_loss):
+            print("\nEpoch :", epoch, "- loss :", losses[-1])
+        if(losses[-1] < target_loss):
             break
     return theOne
 
@@ -70,11 +70,11 @@ def run():
     file = "./circle50.npy"
     dm = DataManager(file=file, size=data_size)
     population = []
-    loss = []
+    losses = []
 
-    theOne = initialize_population(dm, population, loss)
-    theOne = run_genetic(dm, population, loss, theOne)
-    display_evolution(dm, loss, theOne)
+    theOne = initialize_population(dm, population, losses)
+    theOne = run_genetic(dm, population, losses, theOne)
+    display_evolution(dm, losses, theOne)
 
 
 if __name__ == '__main__':

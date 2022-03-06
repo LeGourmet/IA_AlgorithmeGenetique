@@ -20,7 +20,6 @@ class DataManager:
             for _ in tqdm(range(size)):
                 self.data.append((rd.random()*200, rd.random()*200))
 
-
         self.size = len(self.data)
         self.data = self.data[:self.size]
         self.data = np.array(self.data)
