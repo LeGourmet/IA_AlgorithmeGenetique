@@ -134,7 +134,7 @@ def crossover3(g1, g2):
 
 
 def mutation(genome, mutation_rate: float):
-    nb_genes = len(genome)-1
+    nb_genes = len(genome) - 1
     for index1 in range(len(genome)):
         if(rd.random() < mutation_rate):
             index2 = rd.randint(0, nb_genes)
@@ -143,7 +143,7 @@ def mutation(genome, mutation_rate: float):
 
 
 def mutation2(genome, mutation_rate: float):
-    nb_genes = len(genome)-1
+    nb_genes = len(genome) - 1
     for _ in range(nb_genes):
         if(rd.random() < mutation_rate):
             index1 = rd.randint(0, nb_genes)
@@ -155,7 +155,7 @@ def mutation2(genome, mutation_rate: float):
 def mutation3(genome, mutation_rate: float):
     if(rd.random() > mutation_rate):
         return genome
-    nb_genes = len(genome)-1
+    nb_genes = len(genome) - 1
     nb_mutations = int(np.ceil(nb_genes * rd.random()))
     for _ in range(nb_mutations):
         index1 = rd.randint(0, nb_genes)

@@ -28,7 +28,7 @@ def initialize_population(dm, population, losses):
 
 def display_evolution(dm, losses, theOne):
     # todo update matplotlib per n iteration
-    print("best loss =", theOne.loss, "at epoch ", len(losses)-1)
+    print("best loss =", theOne.loss, "at epoch ", len(losses) - 1)
     best_gene = np.array(theOne.genome)
     best_path = dm.data[best_gene]
     vm = ViewManager(losses, best_path)
@@ -44,7 +44,7 @@ def run_genetic(dm, population, losses, theOne):
         losses.append(population[0].loss)
         if theOne.loss > population[0].loss:
             theOne = population[0]
-        if(epoch % (max_epoch//10) == 0):
+        if(epoch % (max_epoch // 10) == 0):
             print("\nEpoch :", epoch, "- loss :", losses[-1])
         if(losses[-1] < target_loss):
             break
