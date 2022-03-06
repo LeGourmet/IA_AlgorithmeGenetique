@@ -5,7 +5,7 @@ from tqdm import tqdm
 
 class DataManager:
 
-    def __init__(self, file=None, size=np.inf):
+    def __init__(self, file=None, size=100):
         self.data = []
         self.size = size
         self.load_data(file, size)
@@ -14,14 +14,14 @@ class DataManager:
         print("Creating data ...")
 
         try:
-            self.data = np.load("./arr.npy")
-        except OSError:
+            self.data = np.load(file)
+        except (OSError, TypeError):
             print("Could not load array")
+            for _ in tqdm(range(size)):
+                self.data.append((rd.random()*200, rd.random()*200))
 
-        # for _ in tqdm(range(100)):
-        #     self.data.append((rd.randint(0, 1000), rd.randint(0, 1000)))
 
-        self.size = min(self.size, len(self.data))
+        self.size = len(self.data)
         self.data = self.data[:self.size]
         self.data = np.array(self.data)
 
