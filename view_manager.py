@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 
+
 class ViewManager:
     def __init__(self):
         # plt.ion()  # montre le plot en fait, donc pas top avec le show_progress=False
