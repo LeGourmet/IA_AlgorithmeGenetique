@@ -1,5 +1,5 @@
 from data_manager import DataManager
-from individu import *
+from individual import *
 import numpy as np
 import random as rd
 from tqdm import tqdm
@@ -13,20 +13,19 @@ def generateGenome(size):
 
 
 def newGen(population, population_size, mutation_rate, data):
-    """breeds a new generation from given parents
+    """Creates a new generation of children from given parents
+    first a mating matrix is calculated, then the new gen is produced and returned
 
     Args:
-        parents : Genes of the parents
-        nbchild : number of children to produce
-        mutation_rate : Percent of genes to modify
+        population (individual[m]): Parents already selected for next gen
+        population_size (int): number of children to produce
+        mutation_rate (float): mutation rate
+        data (int[n][2]): the data to compute the loss of each new individual
+
+    Returns:
+        (individual[population_size]): the new generation
     """
-    # population_size, nb_parents_kept, children = keep_parents(population, keep)
     breed_per_parents, honeyMoon = get_mating_pool(population, population_size)
-    # todo find a betterway to breed parents when nb_parents or nb_children is small (avoid out of range)
-    return evolve(population, population_size, mutation_rate, data, breed_per_parents, honeyMoon)
-
-
-def evolve(population, population_size, mutation_rate, data, breed_per_parents, honeyMoon):
     children = []
     for c in (range(population_size)):
         i = c // breed_per_parents
@@ -35,42 +34,53 @@ def evolve(population, population_size, mutation_rate, data, breed_per_parents, 
         g2 = population[honeyMoon[i][j]].genome
         new_genome = crossover(g1, g2)
         new_genome = mutation(new_genome, mutation_rate)
-        children.append(Individu(new_genome, data))
+        children.append(Individual(new_genome, data))
     return children
 
 
 def get_mating_pool(population, population_size):
-    breed_per_parents = int(np.ceil(population_size / len(population)))  # nb de baise/parents
-    # np.random.shuffle(population)
-    honeyMoon = []  # tableau de chasse de chaque parent
+    """generates a mating matrix for each parent(row)
+    there are corresponding parents to mate with (columns)
+
+    Args:
+        population (individual[n]): the parent population to generate the matrix from
+        population_size (int): number of children to produce
+
+    Returns:
+        int, int[][]: number of breeds per parents, the mating matrix
+    """
+    # todo find a better way to breed parents when nb_parents or nb_children is small (avoid out of range)
+    breed_per_parents = int(np.ceil(population_size / len(population)))
+    honeyMoon = []  # mating matrix
     for i in range(len(population)):
-        tmp = np.arange(0, len(population))    # tous les parents possible
-        tmp = np.delete(tmp, i)                # un parents ne se baise pas lui meme
-        # randomise le tout - todo check si nécéssaire (plus rapide avec shuffle, what ? )
+        tmp = np.arange(0, len(population))
+        tmp = np.delete(tmp, i)  # remove self
         # np.random.shuffle(tmp)
-        honeyMoon.append(tmp[:breed_per_parents])         # prend les premiers parents
+        honeyMoon.append(tmp[:breed_per_parents])  # only keep first parents
     honeyMoon = (np.array(honeyMoon))
     return breed_per_parents, honeyMoon
 
 
-def keep_parents(population, keep):
-    # unused
-    population_size = len(population)
-    nb_parents_kept = population_size * keep
-    childrentemp = population[:int(nb_parents_kept)]
-    children = [c for c in childrentemp if c.age > 5]
-    nb_parents_kept = len(children)
-    return population_size, nb_parents_kept, children
-
-
-# todo return 2 children
 def crossover(g1, g2):
-    size = len(g1)
-    gene_already_treated = [False] * size
+    """best crossover found
+    Cycle crossover is used to avoid collisions,
+    Cycles are found from g1 and g2, and then are alternatively added to the offspring.
+    2 different offspring could be produced this way,
+    but (g1,g2) will produce the complementary offspring from (g2, g1)
+
+    Args:
+        g1 (int[n]): gene 1
+        g2 (int[n]): gene 2
+
+    Returns:
+        int[n]: crossover between g1 and g2
+    """
+    genome_size = len(g1)
+    gene_already_treated = [False] * genome_size
     cycles = []
 
-    # identifie les cycles
-    for gene1 in range(size):
+    # Cycle identification
+    for gene1 in range(genome_size):
         if gene_already_treated[gene1]:
             continue
         gene_already_treated[gene1] = True
@@ -83,7 +93,7 @@ def crossover(g1, g2):
             cycles[-1].append(gene_index)
             gene2 = g2[gene_index]
 
-    # creer fils (recombine les cycles)
+    # Offspring creation (alternate cycles)
     alternate_cycle = False
     genome = []
 
@@ -96,6 +106,19 @@ def crossover(g1, g2):
 
 
 def crossover2(g1, g2):
+    """Crossover 2 genes
+    creates 2 cuts, genome from g1 is kept from 0 to cut1,
+    then genome from g2 from cut1 to cut2
+    and genome from g1 from cut2 to end
+    Collision are taken into account, but this leads to loss of genetic information
+
+    Args:
+        g1 (int[n]): gene 1
+        g2 (int[n]): gene 2
+
+    Returns:
+        int[n]: crossover between g1 and g2
+    """
     offspring1 = []
     offspring2 = []
 
@@ -114,6 +137,18 @@ def crossover2(g1, g2):
 
 
 def crossover3(g1, g2):
+    """Crossover 2 genes
+    Creates a cut, genome from g1 is kept from 0 to cut,
+    Then genome from g2 from cut1 to end
+    Collision are taken into account, but this leads to loss of genetic information
+
+    Args:
+        g1 (int[n]): gene 1
+        g2 (int[n]): gene 2
+
+    Returns:
+        int[n]: crossover between g1 and g2
+    """
     offspring1 = []
     offspring2 = []
 
@@ -128,8 +163,20 @@ def crossover3(g1, g2):
 
 
 def mutation(genome, mutation_rate: float):
+    """mutates a genome
+    This method is the best working so far,
+    each gene is evaluated for a chance to mutate
+    mutation is done by swapping a gene with another random one
+
+    Args:
+        genome (int[n]): gene to mutate
+        mutation_rate (float): mutation probability
+
+    Returns:
+        int[n]: mutated gene
+    """
     nb_genes = len(genome) - 1
-    for index1 in range(len(genome)):
+    for index1 in range(nb_genes+1):
         if(rd.random() < mutation_rate):
             index2 = rd.randint(0, nb_genes)
             genome[index1], genome[index2] = genome[index2], genome[index1]
@@ -137,6 +184,17 @@ def mutation(genome, mutation_rate: float):
 
 
 def mutation2(genome, mutation_rate: float):
+    """mutates a genome
+    does a random roll for each gene,
+    if roll is successful then 2 random genes are selected and swapped
+
+    Args:
+        genome (int[n]): gene to mutate
+        mutation_rate (float): mutation probability
+
+    Returns:
+        int[n]: mutated gene
+    """
     nb_genes = len(genome) - 1
     for _ in range(nb_genes):
         if(rd.random() < mutation_rate):
@@ -147,6 +205,17 @@ def mutation2(genome, mutation_rate: float):
 
 
 def mutation3(genome, mutation_rate: float):
+    """mutates a genome
+    does a random roll for mutation of the whole genome
+    if roll is successful then a random number of genes are selected to be swapped
+
+    Args:
+        genome (int[n]): gene to mutate
+        mutation_rate (float): mutation probability
+
+    Returns:
+        int[n]: mutated gene
+    """
     if(rd.random() > mutation_rate):
         return genome
     nb_genes = len(genome) - 1
@@ -159,12 +228,13 @@ def mutation3(genome, mutation_rate: float):
 
 
 if __name__ == '__main__':
+    """script test"""
     dm = DataManager()
 
     population = []
 
     for _ in tqdm(range(100)):
-        population.append(Individu(generateGenome(dm.size), dm.data))
+        population.append(Individual(generateGenome(dm.size), dm.data))
 
     gene = population[0].genome
     print("==>> population[0].genome: ", gene)

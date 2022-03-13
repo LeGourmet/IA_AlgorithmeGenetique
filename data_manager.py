@@ -4,8 +4,17 @@ from tqdm import tqdm
 
 
 class DataManager:
+    """generates data for the travelling salesman problem
+    data is of form int[n][2]"""
 
-    def __init__(self, file=None, size=100):
+    def __init__(self, file=None, size=50):
+        """generate data from a file (numpy array format)
+        If no file is found, then data is randomly generated
+
+        Args:
+            file (string, optional): The file to load data from. Defaults to None.
+            size (int, optional): the to generate if no file is found. Defaults to 100.
+        """
         self.data = []
         self.size = size
         self.load_data(file, size)
