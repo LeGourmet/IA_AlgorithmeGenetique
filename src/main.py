@@ -6,7 +6,7 @@ from genetics import *
 import numpy as np
 
 # data
-file = "./circle50.npy"
+file = "../data/circle50.npy"
 # file = "./"  # uncomment to load random data instead of file
 data_size = 50
 
