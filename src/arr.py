@@ -14,6 +14,7 @@ def generate_circle(nb_points):
 
 
 def save_cicrcle_array(arr):
+    """save the array to disk"""
     np.save('./data/circle_' + str(len(arr)) + '.npy', arr)
 
 
