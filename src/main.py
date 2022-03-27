@@ -14,7 +14,7 @@ data_size = 50
 max_epoch = 2000
 keep = 0.2
 population_size = 100
-mutation_rate = 0.006
+mutation_rate = 0.007
 target_loss = 3.14
 
 # display options
