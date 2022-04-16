@@ -1,5 +1,3 @@
-from time import sleep
-from typing import List
 from data_manager import DataManager
 from individual import *
 import numpy as np
@@ -29,19 +27,17 @@ def newGen(selected_parents, target_size, mutation_rate, data):
     """
     honeyMoon = get_mating_pool(selected_parents, target_size)
 
+    # create children
     children_genes = breed_parents(selected_parents, honeyMoon)
-
     missing_genes = fill_missing_population(selected_parents, target_size, len(children_genes))
-
     children_genes += (missing_genes)
 
     # mutate children
     children_genes = [mutation(children_genes[i], mutation_rate) for i in range(target_size)]
 
     # create new individuals
-    children = [Individual(children_genes[i], data) for i in range(target_size)]
-
-    return children
+    individuals = [Individual(children_genes[i], data) for i in range(target_size)]
+    return individuals
 
 
 def breed_parents(selected_parents, honeyMoon):
@@ -113,9 +109,11 @@ def crossover(g1, g2):
     Returns:
         int[n]: crossover between g1 and g2
     """
+    # init
     genome_size = len(g1)
     gene_already_treated = [False] * genome_size
     cycles = []
+    genome = []
 
     # Cycle identification
     for gene1 in range(genome_size):
@@ -133,8 +131,6 @@ def crossover(g1, g2):
 
     # Offspring creation (alternate cycles)
     alternate_cycle = False
-    genome = []
-
     for cycle in cycles:
         for gene2 in cycle:
             genome.append(g1[gene2] if alternate_cycle else g2[gene2])
