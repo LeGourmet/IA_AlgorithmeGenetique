@@ -1,3 +1,5 @@
+from time import sleep
+from typing import List
 from data_manager import DataManager
 from individual import *
 import numpy as np
@@ -12,7 +14,7 @@ def generateGenome(size):
     return rd.sample(range(size), size)
 
 
-def newGen(population, population_size, mutation_rate, data):
+def newGen(selected_parents, target_size, mutation_rate, data):
     """Creates a new generation of children from given parents
     first a mating matrix is calculated, then the new gen is produced and returned
 
@@ -25,20 +27,55 @@ def newGen(population, population_size, mutation_rate, data):
     Returns:
         (individual[population_size]): the new generation
     """
-    breed_per_parents, honeyMoon = get_mating_pool(population, population_size)
-    children = []
-    for c in (range(population_size)):
-        i = c // breed_per_parents
-        j = c % breed_per_parents
-        g1 = population[i].genome
-        g2 = population[honeyMoon[i][j]].genome
-        new_genome = crossover(g1, g2)
-        new_genome = mutation(new_genome, mutation_rate)
-        children.append(Individual(new_genome, data))
+    honeyMoon = get_mating_pool(selected_parents, target_size)
+
+    children_genes = breed_parents(selected_parents, honeyMoon)
+
+    missing_genes = fill_missing_population(selected_parents, target_size, len(children_genes))
+
+    children_genes += (missing_genes)
+
+    # mutate children
+    children_genes = [mutation(children_genes[i], mutation_rate) for i in range(target_size)]
+
+    # create new individuals
+    children = [Individual(children_genes[i], data) for i in range(target_size)]
+
     return children
 
 
-def get_mating_pool(population, population_size):
+def breed_parents(selected_parents, honeyMoon):
+    """Breed evry provided parents according to the mating matrix
+    Args: selected_parents (individual[m]): Parents already selected for next gen
+          honeyMoon (int[m][n]): mating matrix """
+    children_genes = []
+    for i in range(honeyMoon.shape[0]):
+        for j in range(honeyMoon.shape[1]):
+            g1 = selected_parents[i].genome
+            g2 = selected_parents[honeyMoon[i][j]].genome
+            new_genome = crossover(g1, g2)
+            children_genes.append(new_genome)
+    return children_genes
+
+
+def fill_missing_population(selected_parents, target_size, nb_child):
+    """Fill the missing population with random parents until the target size is reached
+
+    Args: selected_parents (individual[m]): Parents already selected for next gen
+            target_size (int): number of children desired
+            nb_child (int[n]): number of children already produced"""
+    additional_genes = []
+    if(nb_child < target_size):
+        missing_cheildren = target_size - nb_child
+        print("missed %d missing_cheildren" % missing_cheildren)
+        for i in range(missing_cheildren):
+            random_selected = rd.randint(0, len(selected_parents) - 1)
+            g1 = selected_parents[random_selected].genome
+            additional_genes.append(g1)
+    return additional_genes
+
+
+def get_mating_pool(selected_population, target_size):
     """generates a mating matrix for each parent(row)
     there are corresponding parents to mate with (columns)
 
@@ -49,16 +86,17 @@ def get_mating_pool(population, population_size):
     Returns:
         int, int[][]: number of breeds per parents, the mating matrix
     """
-    # todo find a better way to breed parents when nb_parents or nb_children is small (avoid out of range)
-    breed_per_parents = int(np.ceil(population_size / len(population)))
+    selected_size = len(selected_population)
+    breed_per_parents = int(np.ceil(target_size / selected_size))
     honeyMoon = []  # mating matrix
-    for i in range(len(population)):
-        tmp = np.arange(0, len(population))
+    for i in range(selected_size):
+        tmp = np.arange(0, len(selected_population))
         tmp = np.delete(tmp, i)  # remove self
         # np.random.shuffle(tmp)
         honeyMoon.append(tmp[:breed_per_parents])  # only keep first parents
+
     honeyMoon = (np.array(honeyMoon))
-    return breed_per_parents, honeyMoon
+    return honeyMoon
 
 
 def crossover(g1, g2):

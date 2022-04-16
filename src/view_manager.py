@@ -5,6 +5,7 @@ class ViewManager:
     """manages the display of evolution plot
     2 sub plots are displayed : the loss over time, and the best path found
     """
+
     def __init__(self):
         """Initialize the sub plots, square aspect ratio is used"""
         self.figure, axes = plt.subplots(1, 2, figsize=(10, 4))
