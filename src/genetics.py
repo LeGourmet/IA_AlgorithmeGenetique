@@ -63,7 +63,6 @@ def fill_missing_population(selected_parents, target_size, nb_child):
     additional_genes = []
     if(nb_child < target_size):
         missing_cheildren = target_size - nb_child
-        print("missed %d missing_cheildren" % missing_cheildren)
         for i in range(missing_cheildren):
             random_selected = rd.randint(0, len(selected_parents) - 1)
             g1 = selected_parents[random_selected].genome
@@ -72,8 +71,8 @@ def fill_missing_population(selected_parents, target_size, nb_child):
 
 
 def get_mating_pool(selected_population, target_size):
-    """generates a mating matrix for each parent(row)
-    there are corresponding parents to mate with (columns)
+    """generates a mating matrix
+    for each parent(row), there are corresponding parents to mate with (columns)
 
     Args:
         population (individual[n]): the parent population to generate the matrix from
@@ -83,15 +82,16 @@ def get_mating_pool(selected_population, target_size):
         int, int[][]: number of breeds per parents, the mating matrix
     """
     selected_size = len(selected_population)
-    breed_per_parents = int(np.ceil(target_size / selected_size))
+    breed_per_parents = np.ceil(target_size / selected_size).astype(int)
     honeyMoon = []  # mating matrix
     for i in range(selected_size):
         tmp = np.arange(0, len(selected_population))
         tmp = np.delete(tmp, i)  # remove self
-        # np.random.shuffle(tmp)
+        np.random.shuffle(tmp)
         honeyMoon.append(tmp[:breed_per_parents])  # only keep first parents
 
-    honeyMoon = (np.array(honeyMoon))
+    honeyMoon = np.array(honeyMoon)
+    # honeyMoon = np.transpose(honeyMoon)
     return honeyMoon
 
 

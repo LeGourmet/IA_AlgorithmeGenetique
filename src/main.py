@@ -10,12 +10,14 @@ file = "./data/circle_50.npy"
 # file = "./"  # uncomment to load random data instead of file
 data_size = 50
 
-# training parameters
+# stop conditions
 max_epoch = 2000
-keep = 0.2
+target_loss = 5
+
+# training parameters
+keep_percent = 0.18
 population_size = 100
-mutation_rate = 0.007
-target_loss = 3.14
+mutation_rate = 0.006
 
 # display options
 refresh = 10
@@ -93,7 +95,7 @@ def run_genetic(population, losses, theOne):
     print("Genetic evolution in progress ...")
 
     for epoch in tqdm(range(max_epoch)):
-        elite = population[:int(population_size * keep)]
+        elite = population[:int(population_size * keep_percent)]
         population = newGen(elite, population_size, mutation_rate, data_manager.data)
         population = sort_population(population)
         theOne = update_loss(population[0], losses, theOne)
@@ -103,7 +105,7 @@ def run_genetic(population, losses, theOne):
 
         disaply_evolution_info(population[0], losses, theOne, epoch)
 
-    print("\n(epoch", len(losses)-1, ") - Finished genetic evolution")
+    print("\n(epoch", len(losses) - 1, ") - Finished genetic evolution")
     print("Best loss :", theOne.loss, "at epoch ", np.argmin(losses))
     return theOne
 
