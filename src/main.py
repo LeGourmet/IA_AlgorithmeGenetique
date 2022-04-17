@@ -61,7 +61,7 @@ def update_evolution_graph(losses, first_individual, final=False):
     if show_progress:
         view_manager.update(losses, best_path)
     if final:
-        view_manager.update(losses, best_path, final=True)
+        view_manager.freeze(losses, best_path)
 
 
 def disaply_evolution_info(last_individual, losses, theOne, epoch):

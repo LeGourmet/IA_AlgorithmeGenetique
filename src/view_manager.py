@@ -20,8 +20,12 @@ class ViewManager:
         Args:
             losses (float[]): loss over time
             path (int[n][2]): path to display, data is ordered
-            final (bool, optional): Locks the plot for final display. Defaults to False.
         """
+        plt.ion()
+        self.prepare_plots(losses, path)
+        plt.pause(0.01)
+
+    def prepare_plots(self, losses, path):
         self.fig_path.clear()
         self.fig_loss.clear()
         for i in range(len(path)):
@@ -33,7 +37,7 @@ class ViewManager:
         self.fig_loss.set_ylabel('Loss')
         self.fig_loss.plot(losses)
 
-        if final:
-            plt.show(block=True)
-        else:
-            plt.pause(0.01)
+    def freeze(self, losses, path):
+        self.prepare_plots(losses, path)
+        plt.ioff()
+        plt.show(block=True)
