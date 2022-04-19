@@ -2,6 +2,7 @@ import numpy as np
 import random as rd
 from tqdm import tqdm
 
+#todo create circle on the fly
 
 class DataManager:
     """generates data for the travelling salesman problem
