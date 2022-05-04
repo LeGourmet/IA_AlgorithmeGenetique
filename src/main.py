@@ -35,10 +35,8 @@ def initialize_population(losses):
     Args:
         data_manager (DataManager): the data manager
         losses (float[]): loss over time
-
     Returns:
-        Individual, Individual[]: the best individual, the whole population
-    """
+        Individual, Individual[]: the best individual, the whole population"""
     population = []
     for _ in range(population_size):
         population.append(Individual(generateGenome(data_manager.size), data_manager.data))
@@ -54,8 +52,7 @@ def update_evolution_graph(losses, first_individual, final=False):
     Args:
         losses (float[]): loss over time
         last_gene (Individual): Individual from whom the path will be displayed
-        final (bool, optional): Locks the plot for final display. Defaults to False.
-    """
+        final (bool, optional): Locks the plot for final display. Defaults to False."""
     best_gene = np.array(first_individual.genome)
     best_path = data_manager.data[best_gene]
     if show_progress:
@@ -71,8 +68,7 @@ def disaply_evolution_info(last_individual, losses, theOne, epoch):
         last_individual (Individual): the individual to display
         losses (float[]): loss over time
         theOne (Individual): best individual
-        epoch (int): the epoch
-    """
+        epoch (int): the epoch"""
     if(epoch % (max_epoch // 10) == 0):  # update every 10% of progress
         print("\nEpoch :", epoch, "- loss :", losses[-1])
         print("Best loss :", theOne.loss, "at epoch ", np.argmin(losses), "\n")
@@ -88,12 +84,10 @@ def run_genetic(population, losses, theOne):
         population (Individual[]): the population to evolve
         losses (float[]): loss over time
         theOne (Individual): best individual
-
     Returns:
-        Individual: The best individual across all epochs
-    """
-    print("Genetic evolution in progress ...")
+        Individual: The best individual across all epochs"""
 
+    print("Genetic evolution in progress ...")
     for epoch in tqdm(range(max_epoch)):
         elite = population[:int(population_size * keep_percent)]
         population = newGen(elite, population_size, mutation_rate, data_manager.data)
@@ -117,11 +111,8 @@ def update_loss(best_candidate, losses, theOne):
         best_candidate (Individual): the best candidate to replace theOne and update loss
         losses (float[]): loss over time
         theOne (Individual): best individual
-
     Returns:
-        (Individual): best individual
-    """
-
+        (Individual): best individual"""
     losses.append(best_candidate.loss)
     if theOne.loss > best_candidate.loss:
         theOne = best_candidate
@@ -142,10 +133,8 @@ def sort_population(population):
 
     Args:
         population (Individual[]): the population
-
     Returns:
-        (Individual[]): the sorted population
-    """
+        (Individual[]): the sorted population"""
     population = sorted(population, key=lambda individu: individu.loss)
     return population
 

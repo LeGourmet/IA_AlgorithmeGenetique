@@ -3,8 +3,7 @@ import matplotlib.pyplot as plt
 
 class ViewManager:
     """manages the display of evolution plot
-    2 sub plots are displayed : the loss over time, and the best path found
-    """
+    2 sub plots are displayed : the loss over time, and the best path found """
 
     def __init__(self):
         """Initialize the sub plots, square aspect ratio is used"""
@@ -19,8 +18,7 @@ class ViewManager:
 
         Args:
             losses (float[]): loss over time
-            path (int[n][2]): path to display, data is ordered
-        """
+            path (int[n][2]): path to display, data is ordered"""
         plt.ion()
         self.prepare_plots(losses, path)
         plt.pause(0.01)
@@ -38,6 +36,11 @@ class ViewManager:
         self.fig_loss.plot(losses)
 
     def freeze(self, losses, path):
+        """freeze the plot for display
+
+        Args:
+            losses (float[]): loss over time
+            path (int[n][2]): path to display, data is ordered"""
         self.prepare_plots(losses, path)
         plt.ioff()
         plt.show(block=True)

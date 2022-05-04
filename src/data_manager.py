@@ -2,7 +2,6 @@ import numpy as np
 import random as rd
 from tqdm import tqdm
 
-#todo create circle on the fly
 
 class DataManager:
     """generates data for the travelling salesman problem
@@ -14,8 +13,7 @@ class DataManager:
 
         Args:
             file (string, optional): The file to load data from. Defaults to None.
-            size (int, optional): the to generate if no file is found. Defaults to 100.
-        """
+            size (int, optional): the to generate if no file is found. Defaults to 100."""
         self.data = []
         self.size = size
         self.load_data(file, size)
@@ -26,7 +24,7 @@ class DataManager:
         try:
             self.data = np.load(file)
         except (OSError, TypeError):
-            print("Could not load array")
+            print("Could not load file, using random data instead")
             for _ in tqdm(range(size)):
                 self.data.append((rd.random(), rd.random()))
 

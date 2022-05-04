@@ -21,7 +21,6 @@ def newGen(selected_parents, target_size, mutation_rate, data):
         population_size (int): number of children to produce
         mutation_rate (float): mutation rate
         data (int[n][2]): the data to compute the loss of each new individual
-
     Returns:
         (individual[population_size]): the new generation
     """
@@ -77,7 +76,6 @@ def get_mating_pool(selected_population, target_size):
     Args:
         population (individual[n]): the parent population to generate the matrix from
         population_size (int): number of children to produce
-
     Returns:
         int, int[][]: number of breeds per parents, the mating matrix
     """
@@ -105,7 +103,6 @@ def crossover(g1, g2):
     Args:
         g1 (int[n]): gene 1
         g2 (int[n]): gene 2
-
     Returns:
         int[n]: crossover between g1 and g2
     """
@@ -149,7 +146,6 @@ def crossover2(g1, g2):
     Args:
         g1 (int[n]): gene 1
         g2 (int[n]): gene 2
-
     Returns:
         int[n]: crossover between g1 and g2
     """
@@ -205,7 +201,6 @@ def mutation(genome, mutation_rate: float):
     Args:
         genome (int[n]): gene to mutate
         mutation_rate (float): mutation probability
-
     Returns:
         int[n]: mutated gene
     """
@@ -225,7 +220,6 @@ def mutation2(genome, mutation_rate: float):
     Args:
         genome (int[n]): gene to mutate
         mutation_rate (float): mutation probability
-
     Returns:
         int[n]: mutated gene
     """
@@ -246,10 +240,8 @@ def mutation3(genome, mutation_rate: float):
     Args:
         genome (int[n]): gene to mutate
         mutation_rate (float): mutation probability
-
     Returns:
-        int[n]: mutated gene
-    """
+        int[n]: mutated gene"""
     if(rd.random() > mutation_rate):
         return genome
     nb_genes = len(genome) - 1
