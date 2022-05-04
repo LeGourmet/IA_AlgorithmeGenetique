@@ -13,7 +13,7 @@ class DataManager:
 
         Args:
             file (string, optional): The file to load data from. Defaults to None.
-            size (int, optional): the to generate if no file is found. Defaults to 100."""
+            size (int, optional): the to generate if no file is found. Defaults to 50."""
         self.data = []
         self.size = size
         self.load_data(file, size)
